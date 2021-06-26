@@ -336,7 +336,7 @@
             const form = $("#productModalForm")
             const serializeData = form.serializeArray();
             serializeData.push({name: 'is_available', value: true})
-            if  ($("#product_price").val() >= $("#sell_price").val()){
+            if  (parseFloat($("#product_price").val()) >= parseFloat($("#sell_price").val())){
                 $("#productSuccessErrorText").html(`<span class="text-danger">Sell Price cannot be less than or equal to purchase price.</span>`)
                 return
             }
