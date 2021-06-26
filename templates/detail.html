@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block external_css %}
+    <style type="text/css">
+        .preview {
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+            flex-direction: column;
+        }
+
+        @media screen and (max-width: 996px) {
+            .preview {
+                margin-bottom: 20px;
+            }
+        }
+
+        .preview-pic {
+            -webkit-box-flex: 1;
+            -webkit-flex-grow: 1;
+            -ms-flex-positive: 1;
+            flex-grow: 1;
+        }
+
+        .tab-content {
+            overflow: hidden;
+        }
+
+        .tab-content img {
+            width: 100%;
+            -webkit-animation-name: opacity;
+            animation-name: opacity;
+            -webkit-animation-duration: .3s;
+            animation-duration: .3s;
+        }
+
+        .album .container .card {
+            margin-top: 50px;
+            background: #eee;
+            padding: 3em;
+            line-height: 1.5em;
+        }
+
+        @media screen and (min-width: 997px) {
+            .wrapper {
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+            }
+        }
+
+        @-webkit-keyframes opacity {
+            0% {
+                opacity: 0;
+                -webkit-transform: scale(3);
+                transform: scale(3);
+            }
+            100% {
+                opacity: 1;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+
+        @keyframes opacity {
+            0% {
+                opacity: 0;
+                -webkit-transform: scale(3);
+                transform: scale(3);
+            }
+            100% {
+                opacity: 1;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+    </style>
+{% endblock %}
+{% block title %} Home {% endblock %}
+{% block body %}
+    <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="card">
+                <div class="container-fluid">
+                    <div class="wrapper row"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block external_js %}
+    <script type="text/javascript">
+        let originalModal = $('#modalForm').clone();
+        $(document).ready(function () {
+            $.ajax({
+                method: 'GET',
+                url: `/api/products/{{ id }}`,
+                beforeSend: function () {
+                    $(".wrapper").html(`<div class="row"><div class="col-md-12" style="text-align: center;"><strong>Loading data...</strong></div></div>`)
+                },
+                success: function (response, status, jqXHR) {
+                    if (jqXHR.status === 200 && status === 'success') {
+                        let categoryData = ''
+                        for (let i=0; i < response.category.length; i++) {
+                            categoryData += `
+                                <h5><span class="badge badge-primary">${response.category[i].category_name}</span></h5>
+                            `
+                        }
+                        let htmlData = `
+                        <div class="preview col-md-6">
+                            <div class="preview-pic tab-content">
+                                <div class="tab-pane active" id="pic-1"><img src="${response.image_url}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="details col-md-6">
+                            <h3 class="product-title">${response.product_name}</h3>
+                            <h5>Product Id: ${response.custom_id}</h5>
+                            ${categoryData}
+                            <h6 class="price">current price: <span>₹ ${parseFloat(response.sell_price).toFixed(1)}</span></h6>
+                        </div>
+                        `;
+                        $(".wrapper").html(htmlData);
+                    }
+                },
+            });
+        });
+    </script>
+{% endblock %}

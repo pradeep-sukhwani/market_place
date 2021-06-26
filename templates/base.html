@@ -1,0 +1,380 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Dynamic URL">
+    <meta name="author" content="Pradeep Sukhwani">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta content="origin" name="referrer">
+    {# CSS #}
+    <style type="text/css">
+        .bootstrap-select .dropdown-toggle {
+            height: 40px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css"/>
+    {% block external_css %}{% endblock %}
+
+    <title>{% block title %}{% endblock %} | Market Place</title>
+</head>
+<body>
+<header>
+    <div class="collapse bg-dark" id="navbarHeader">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                    <h4 class="text-white">About</h4>
+                    <p class="text-muted">Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
+                        printer took a galley of type and scrambled it to make a type specimen book. It has survived not
+                        only five centuries, but also the leap into electronic typesetting, remaining essentially
+                        unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem
+                        Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker
+                        including versions of Lorem Ipsum.</p>
+                </div>
+                <div class="col-sm-4 offset-md-1 py-4">
+                    <h4 class="text-white">Contact</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://github.com/pssukhwani" target="_blank" class="text-white">
+                            GitHub</a></li>
+                        <li><a href="https://www.linkedin.com/in/pssukhwani/" target="_blank" class="text-white">LinkedIn</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between">
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 64 64" fill="none"
+                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                    <path data-name="layer2"
+                          fill="none" stroke="#ffffff" stroke-miterlimit="10" stroke-width="2"
+                          d="M18 23.5l10-10 10 10m8 0v-10h12v10"
+                          stroke-linejoin="round" stroke-linecap="round"></path>
+                    <path data-name="layer2" fill="none" stroke="#ffffff" stroke-miterlimit="10"
+                          stroke-width="2" d="M36 21.5l7-17 7 3-2.4 6m-1.6 4l-2.4 6" stroke-linejoin="round"
+                          stroke-linecap="round"></path>
+                    <path data-name="layer1" fill="none" stroke="#ffffff" stroke-miterlimit="10"
+                          stroke-width="2" d="M2 7.5h10l10 40h32l8-24H16" stroke-linejoin="round"
+                          stroke-linecap="round"></path>
+                    <circle data-name="layer1" cx="24" cy="55.5" r="4" fill="none"
+                            stroke="#ffffff" stroke-miterlimit="10" stroke-width="2" stroke-linejoin="round"
+                            stroke-linecap="round"></circle>
+                    <circle data-name="layer1" cx="50" cy="55.5" r="4" fill="none"
+                            stroke="#ffffff" stroke-miterlimit="10" stroke-width="2" stroke-linejoin="round"
+                            stroke-linecap="round"></circle>
+                </svg>
+                <strong>Market Place</strong>
+            </a>
+            <ul class="mr-auto"
+                style="display: flex; -ms-flex-direction: column; flex-direction: column; padding-left: 0; margin-bottom: 0; list-style: none;">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: white;">Action
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% if user.is_authenticated %}
+                            <a href="#" class="nav-link disabled" disabled>Logged in as {{ user.username }}</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="productModal dropdown-item" data-toggle="modal"
+                               data-target="#productModal">+ Add Product
+                            </a>
+                            <a href="#" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">Logout</a>
+                        {% else %}
+                            <a href="#" class="nav-link disabled" disabled>Hello Guest</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" data-toggle="modal"
+                               data-target="#loginModal">Login
+                            </a>
+                        {% endif %}
+                    </div>
+                </li>
+            </ul>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </div>
+</header>
+<section class="jumbotron">
+    <div class="container"></div>
+</section>
+{% comment %}Container where all the data resides{% endcomment %}
+{% block body %}{% endblock %}
+{% include 'modal.html' %}
+{% comment %} Loading JS: jQuery & Bootstrap {% endcomment %}
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<script type="application/javascript">
+    $(document).ready(function () {
+        /* Top Viewed Products */
+        $.ajax({
+            method: 'GET',
+            url: `/api/top_viewed_products`,
+            beforeSend: function () {
+                $(".jumbotron .container").html(`<div class="row"><div class="col-md-12" style="text-align: center;"><strong>Loading data...</strong></div></div>`)
+            },
+            success: function (response, status, jqXHR) {
+                if (jqXHR.status === 200 && status === 'success') {
+                    let htmlData = ``;
+                    let paginationData = ''
+                    let totalPages = Math.ceil(response.count / 20);
+                    if (totalPages > 1) {
+                        for (let j = 0; j < totalPages; j++) {
+                            if (pageNumber === j + 1) {
+                                paginationData += `<li class="page-item active"><span class="page-link">${j + 1}<span class="sr-only">(current)</span></span></li>`
+                            } else {
+                                paginationData += `<li class="page-item"><a class="page-link" href="#" data-page-number="${j + 1}">${j + 1}</a></li>`
+                            }
+                        }
+                    }
+                    let count = 0
+                    for (let i = 0; i < response.results.length; i++) {
+                        if (count === 4) {
+                            break;
+                        }
+                        if (response.results[i].id == window.location.href.split('/')[window.location.href.split('/').length - 2]) {
+                            continue;
+                        }
+                        htmlData += `
+                            <div class="col-md-3">
+                                <div class="card mb-4 shadow-sm">
+                                    <img class="card-img-top"
+                                         alt="${response.results[i].product_name}"
+                                         style="height: 225px; width: 100%; display: block;"
+                                         src="${response.results[i].image_url}">
+                                    <div class="card-body">
+                                        <p class="card-text"><strong>${response.results[i].product_name}</strong></p>
+                                        <p class="card-text">₹ ${parseFloat(response.results[i].sell_price).toFixed(1)}</p>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="btn-group">
+                                                <a href="/product/${response.results[i].id}" type="button" class="btn btn-sm btn-outline-secondary">View</a>
+                                                <a href="#" data-toggle="modal" data-target="#productModal" class="editProduct btn btn-sm btn-outline-secondary" data-product-id="${response.results[i].id}">Edit</a>
+                                            </div>
+                                            <small class="text-muted">${response.results[i].product_viewed.length} views</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `
+                        count += 1
+                    }
+                    if (htmlData) {
+                        $(".jumbotron .container").html(`<h4 class="jumbotron-heading">Top Viewed Products</h4>
+                                                        <div class="row">${htmlData}</div>`);
+                    } else {
+                        $(".jumbotron .container").empty();
+                    }
+                }
+            },
+        });
+
+        /* Edit Products */
+        $(document).on("click", "a.editProduct" , function() {
+            const productId = this.dataset.productId;
+            $("#productModalLabel").text('Edit Product')
+            $.ajax({
+                method: 'GET',
+                url: `/api/products/${productId}`,
+                success: function (response, status, jqXHR) {
+                    if (jqXHR.status === 200 && status === 'success') {
+                        {#$('input[name="csrfmiddlewaretoken"]').remove();#}
+                        {#$('#productModalForm').append(`{% csrf_token %}`)#}
+                        $("#product_name").val(response.product_name);
+                        $("#image_url").val(response.image_url);
+                        $("#product_price").val(parseFloat(response.product_price).toFixed(1));
+                        $("#sell_price").val(parseFloat(response.sell_price).toFixed(1));
+                        /*$("div").remove('.categoryFormGroup');*/
+                        $(".categoryFormGroup").empty();
+                        $("#productFormSubmit").html('Save');
+                        $('#productModalForm').attr('action', `/api/products/${productId}/`);
+                        $('#productModalForm').attr('method', 'PATCH');
+                    }
+                },
+            });
+        });
+        /* Reset Edit Product Form */
+        $(".productModal").click(function () {
+            $("#productModalForm").trigger("reset");
+            $(".categoryFormGroup").html(`
+            <label for="category" class="col-form-label">Category</label>
+            <select class="form-control selectpicker" name="category" multiple data-live-search="true" required>
+                {% for item in categories %}
+                    <option value="{{ item.id }}">{{ item.category_name }}</option>
+                {% endfor %}
+            </select>
+            `)
+            $("#productFormSubmit").html('Create');
+            $('#productModalForm').attr('action', `/api/products/`)
+            $('#productModalForm').attr('method', 'POST');
+            /* Load picker on select picker */
+            $('.selectpicker').selectpicker();
+        });
+        /*
+        let selectDropDown = $(".selectpicker");
+        selectDropDown.empty();
+        $(".selectpicker").append('<option selected="true" disabled>Choose Category</option>');
+        $(".selectpicker").prop('selectedIndex', 0);
+        $(".productModal").click(function () {
+            $.ajax({
+                method: 'GET',
+                url: '/category/',
+                success: function (response, status, jqXHR) {
+                    if (jqXHR.status === 200) {
+                        let htmlData = []
+                        for (let i=0; i<response.length; i++) {
+                            htmlData.push({
+                                id: response[i].id,
+                                text: response[i].category_name
+                            })
+                        }
+                        const q = "{" + "{" + "{" + "q" + "}" + "}" + "}"
+                        $('.selectpicker').selectpicker({
+                            ajax: {
+                                url: '/category/',
+                                type:'GET',
+                                dataType:'json',
+                                data: {
+                                    q:q
+                                },
+                                preprocessData:function (data) {
+                                    var i, l = data.length, array = [];
+                                    if (l) {
+                                        for (i = 0; i < l; i++) {
+                                            array.push($.extend(true, data[i], {
+                                                text : data[i].text,
+                                                value: data[i].id,
+                                                data : {
+                                                    subtext: data[i].id
+                                                }
+                                            }));
+                                        }
+                                    }
+                                    return array;
+                                }
+                            }
+                        });
+                        $(".selectpicker").selectpicker({data: htmlData});
+                    }
+                },
+            });
+        });*/
+        /* Login Form */
+        $("#loginForm").submit(function (e) {
+            e.preventDefault();
+            const form = $("#loginForm")
+            const serializeData = form.serializeArray();
+            $.ajax({
+                method: form.attr('method'),
+                url: form.attr('action'),
+                data: serializeData,
+                beforeSend: function () {
+                    $("#loginFormSubmit").html('Please wait...')
+                    $('#loginFormSubmit').css("cursor", 'not-allowed');
+                    $('#loginFormSubmit').prop("disabled", true);
+                },
+                success: function (response, status, jqXHR) {
+                    if (jqXHR.status === 200) {
+                        $("#loginSuccessErrorText").html('<span class="text-success">Login successfully</span>')
+                        setTimeout(function () {
+                            window.location.replace("/");
+                        }, 1000);
+                    }
+                },
+                error: function (response) {
+                    $("#loginSuccessErrorText").html(`<span class="text-danger">Incorrect Credentials</span>`)
+                    $('#loginFormSubmit').css("cursor", 'pointer');
+                    $('#loginFormSubmit').prop("disabled", false);
+                    $("#loginFormSubmit").html('Login')
+                },
+            });
+        });
+        /* Logout Form */
+        $("#logoutForm").submit(function (e) {
+            e.preventDefault();
+            const form = $("#logoutForm")
+            const serializeData = form.serializeArray();
+            $.ajax({
+                method: form.attr('method'),
+                url: form.attr('action'),
+                data: serializeData,
+                beforeSend: function () {
+                    $("#logoutFormSubmit").html('Please wait...')
+                    $('#logoutFormSubmit').css("cursor", 'not-allowed');
+                    $('#logoutFormSubmit').prop("disabled", true);
+                },
+                success: function (response, status, jqXHR) {
+                    if (jqXHR.status === 200) {
+                        $("#loginSuccessErrorText").html('<span class="text-success">Logout successfully</span>')
+                        setTimeout(function () {
+                            window.location.replace("/");
+                        }, 1000);
+                    }
+                },
+                error: function (response) {
+                    $('#logoutFormSubmit').css("cursor", 'pointer');
+                    $('#logoutFormSubmit').prop("disabled", false);
+                    $("#logoutFormSubmit").html('Logout')
+                },
+            });
+        });
+        /* Product Modal Form */
+        $("#productModalForm").submit(function (e) {
+            e.preventDefault();
+            const form = $("#productModalForm")
+            const serializeData = form.serializeArray();
+            serializeData.push({name: 'is_available', value: true})
+            if  ($("#product_price").val() >= $("#sell_price").val()){
+                $("#productSuccessErrorText").html(`<span class="text-danger">Sell Price cannot be less than or equal to purchase price.</span>`)
+                return
+            }
+            $.ajax({
+                method: form.attr('method'),
+                url: form.attr('action'),
+                data: serializeData,
+                beforeSend: function () {
+                    $("#productFormSubmit").html('Please wait...')
+                    $('#productFormSubmit').css("cursor", 'not-allowed');
+                    $('#productFormSubmit').prop("disabled", true);
+                },
+                success: function (response, status, jqXHR) {
+                    if (status === 'success') {
+                        if (form.attr('method') === 'POST' && jqXHR.status === 201) {
+                            $("#productSuccessErrorText").html('<span class="text-success">Added Successdully</span>');
+                        } else if (form.attr('method') === 'PATCH' && jqXHR.status === 200) {
+                            $("#productSuccessErrorText").html('<span class="text-success">Update Successdully</span>');
+                        }
+                        setTimeout(function () {
+                            window.location.replace("/");
+                        }, 1000);
+                    }
+                },
+                error: function (response) {
+                    $("#productSuccessErrorText").html(`<span class="text-danger">${response.responseJSON.detail}</span>`)
+                    $('#productFormSubmit').css("cursor", 'pointer');
+                    $('#productFormSubmit').prop("disabled", false);
+                    if (form.attr('method') === 'POST') {
+                        $("#productFormSubmit").html('Create');
+                    } else {
+                        $("#productFormSubmit").html('Save');
+                    }
+                },
+            });
+        });
+    });
+</script>
+{% block external_js %}{% endblock %}
+</body>
+</html>

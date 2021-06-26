@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Home {% endblock %}
+{% block body %}
+    <div class="album py-5 bg-light">
+        <div class="container"></div>
+    </div>
+{% endblock %}
+
+{% block external_js %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click", "a.page-link" , function() {
+                getData(parseInt(this.text));
+            });
+
+            function getData(pageNumber) {
+                $.ajax({
+                    method: 'GET',
+                    url: `/api/products/?page=${pageNumber}`,
+                    beforeSend: function () {
+                        $(".album .container").html(`<div class="row"><div class="col-md-12" style="text-align: center;"><strong>Loading data...</strong></div></div>`)
+                    },
+                    success: function (response, status, jqXHR) {
+                        if (jqXHR.status === 200 && status === 'success') {
+                            let htmlData = ``;
+                            let paginationData = ''
+                            let totalPages = Math.ceil(response.count / 20);
+                            for (let j = 0; j < totalPages; j++) {
+                                if (pageNumber === j + 1) {
+                                    paginationData += `<li class="page-item active"><span class="page-link">${j + 1}<span class="sr-only">(current)</span></span></li>`
+                                } else {
+                                    paginationData += `<li class="page-item"><a class="page-link" href="javascript:void(0);">${j + 1}</a></li>`
+                                }
+                            }
+                            for (let i = 0; i < response.results.length; i++) {
+                                htmlData += `
+                                    <div class="col-md-3">
+                                        <div class="card mb-4 shadow-sm">
+                                            <img class="card-img-top"
+                                                 alt="${response.results[i].product_name}"
+                                                 style="height: 225px; width: 100%; display: block;"
+                                                 src="${response.results[i].image_url}">
+                                            <div class="card-body">
+                                                <p class="card-text"><strong>${response.results[i].product_name}</strong></p>
+                                                <p class="card-text">₹ ${parseFloat(response.results[i].sell_price).toFixed(1)}</p>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="btn-group">
+                                                        <a href="/product/${response.results[i].id}" type="button" class="btn btn-sm btn-outline-secondary">View</a>
+                                                        <a href="#" data-toggle="modal" data-target="#productModal" class="editProduct btn btn-sm btn-outline-secondary" data-product-id="${response.results[i].id}">Edit</a>
+                                                    </div>
+                                                    <small class="text-muted">${response.results[i].product_viewed.length} views</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `
+                            }
+                            $(".album .container").html(`
+                            <div class="row">${htmlData}</div>
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-center">${paginationData}</ul>
+                            </nav>
+                        `);
+                        }
+                    },
+                });
+            }
+
+            getData(1)
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,105 @@
+<div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="productModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productModalLabel">New Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="productModalForm" method="post" action="{% url 'core-app:product_list' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="name" class="col-form-label">Name:</label>
+                        <input type="text" name="product_name" class="form-control" id="product_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="image_url" class="col-form-label">Image URL:</label>
+                        <input type="url" name="image_url" class="form-control" id="image_url" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="product_price" class="col-form-label">Purchase Price:</label>
+                        <input type="number" step="0.1" min="0.1" value="0.1" name="product_price" class="form-control" id="product_price">
+                    </div>
+                    <div class="form-group">
+                        <label for="sell_price" class="col-form-label">Sell Price:</label>
+                        <input type="number" step="0.1" min="0.1" value="1.1" name="sell_price" class="form-control" id="sell_price">
+                    </div>
+                    <div class="form-group categoryFormGroup">
+                        <label for="category" class="col-form-label">Category</label>
+                        <select class="form-control selectpicker" name="category" multiple data-live-search="true" required>
+                            {% for item in categories %}
+                                <option value="{{ item.id }}">{{ item.category_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="productFormSubmit">Create</button>
+                </form>
+            </div>
+            <div class="form-group">
+                <div id="productSuccessErrorText" style="padding: 0 0 0 10px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel">Login</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" action="{% url 'core-app:login' %}" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username" class="col-form-label">Username:</label>
+                        <input type="text" name="username" class="form-control" id="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-form-label">Password:</label>
+                        <input type="password" name="password" class="form-control" id="password">
+                    </div>
+                    <div class="modal-footer" style="justify-content: center;">
+                        <button type="submit" class="btn btn-primary" id="loginFormSubmit">Login</button>
+                    </div>
+                </form>
+            </div>
+            <div class="form-group">
+                <div id="loginSuccessErrorText" style="padding: 0 0 0 10px;"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="logoutModalLabel">Hey {{ user.username }},</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="logoutForm" action="{% url 'core-app:logout' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ user.username }}">
+                    <div class="form-group">
+                        Are you sure that you want to logout?
+                    </div>
+                    <div class="modal-footer" style="justify-content: center;">
+                        <button type="submit" class="btn btn-danger" id="logoutFormSubmit">Logout</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
